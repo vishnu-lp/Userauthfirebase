@@ -162,7 +162,7 @@ def user_detail(request, pk):
         result = fire_base.get('/users', None)
 
         user_profile_serializer = UserProfileSerializer(user)
-        return Response(result, status=status.HTTP_200_OK)
+        return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'PUT':
         try:
             data = validations_utils.email_validation(data)  # Validates email id, it returns lower-cased email in data.
@@ -312,3 +312,10 @@ def delete_user(request, pk):
             return Response(e.errors, status=e.status)
         user.delete()
         return Response(messages.DELETED_USER, status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'GET':
+        try:
+            user = validations_utils.user_validation(pk)  # Validates if user exists or not.
+        except ValidationException as e:  # Generic exception
+            return Response(e.errors, status=e.status)
+        user_profile_serializer = UserProfileSerializer(user)
+        return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
