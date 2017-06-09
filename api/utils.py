@@ -4,6 +4,7 @@ from rest_framework import status
 import exceptions_utils
 import messages
 from serializers import UserSerializer, UserProfileSerializer
+from firebase import firebase
 
 
 # def fetch_token(user):
@@ -22,7 +23,9 @@ def hash_password(password):
 def create_user(data):
     user_serializer = UserSerializer(data=data)
     if user_serializer.is_valid():
+        fire_base = firebase.FirebaseApplication('https://userfirebase-1e188.firebaseio.com/', None)
         user = user_serializer.save()
+        result = fire_base.post('/users', user_serializer.data)
         # token = Token.objects.create(user=user)
         keys = ['id', 'first_name', 'last_name', 'email', 'contact_no', 'created'
                 ]  # data that we want to return as JSON response
@@ -36,7 +39,9 @@ def create_user(data):
 def update_user(data, user):
     user_serializer = UserProfileSerializer(data=data, instance=user)
     if user_serializer.is_valid():
+        fire_base = firebase.FirebaseApplication('https://userfirebase-1e188.firebaseio.com/', None)
         user_serializer.save()
+        result = fire_base.put('/users', user_serializer.data)
         return user_serializer.data
     else:
         raise exceptions_utils.ValidationException(user_serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -73,4 +78,3 @@ def change_password(current_password, new_password, user):
     else:
         raise exceptions_utils.ValidationException(messages.CURRENT_PASSWORD_INCORRECT,
                                                    status.HTTP_401_UNAUTHORIZED)
-

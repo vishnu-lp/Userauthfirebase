@@ -72,3 +72,7 @@ USER_WITH_EMAIL_DOES_NOT_EXISTS = {
 PASSWORD_MISMATCH = {
     MESSAGE: "Passwords does not match!"
 }
+
+DELETED_USER = {
+    MESSAGE: "User is successfully deleted!"
+}

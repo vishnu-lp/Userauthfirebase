@@ -1,6 +1,9 @@
 import re
 
+from firebase import firebase
+
 import messages
+from models import User
 from permission import UserPermissions
 from django.contrib.auth import authenticate
 from rest_framework import status
@@ -10,7 +13,8 @@ from rest_framework.response import Response
 import utils
 import validations_utils
 from exceptions_utils import ValidationException
-from serializers import UserProfileSerializer
+from serializers import UserProfileSerializer, UserSerializer
+from rest_framework.generics import DestroyAPIView
 
 
 # Create your views here.
@@ -154,8 +158,11 @@ def user_detail(request, pk):
     except ValidationException as e:  # Generic exception
         return Response(e.errors, status=e.status)
     if request.method == 'GET':
+        fire_base = firebase.FirebaseApplication('https://userfirebase-1e188.firebaseio.com/', None)
+        result = fire_base.get('/users', None)
+
         user_profile_serializer = UserProfileSerializer(user)
-        return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
+        return Response(result, status=status.HTTP_200_OK)
     elif request.method == 'PUT':
         try:
             data = validations_utils.email_validation(data)  # Validates email id, it returns lower-cased email in data.
@@ -293,3 +300,15 @@ def user_change_password(request, pk):
                 return Response(password, status=status.HTTP_200_OK)
             except ValidationException as e:
                 return Response(e.errors, status=e.status)
+
+
+@api_view(['DELETE', 'GET'])
+@permission_classes((AllowAny,))
+def delete_user(request, pk):
+    if request.method == 'DELETE':
+        try:
+            user = validations_utils.user_validation(pk)  # Validates if user exists or not.
+        except ValidationException as e:  # Generic exception
+            return Response(e.errors, status=e.status)
+        user.delete()
+        return Response(messages.DELETED_USER, status=status.HTTP_204_NO_CONTENT)
