@@ -2,6 +2,6 @@
 venv/
 db.sqlite3
 .idea/
-#music/migrations/*.py
+api/migrations/*.py
 local_settings.py
 media/
