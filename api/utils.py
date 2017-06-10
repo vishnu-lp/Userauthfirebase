@@ -25,7 +25,7 @@ def create_user(data):
     if user_serializer.is_valid():
         fire_base = firebase.FirebaseApplication('https://vogorentals.firebaseio.com//', None)
         user = user_serializer.save()
-        result = fire_base.post('/users', user_serializer.data)
+        result = fire_base.post('/users', user_serializer.data) #Creates an Entry in Firebase
         # token = Token.objects.create(user=user)
         keys = ['id', 'first_name', 'last_name', 'email', 'contact_no', 'created'
                 ]  # data that we want to return as JSON response
@@ -43,11 +43,11 @@ def update_user(data, user):
         user_serializer.save()
         result = fire_base.get('/users', None)
         res = result.keys()
-        urlkey = ''
-        for i in res:
+        urlkey = '' 
+        for i in res: #Obtain the unique key
             if result[str(i)]['id'] == int(user.id): #replace 2 with id of the element you wish to update
                 urlkey = str(i)
-        rem = fire_base.patch('users/'+urlkey,user_serializer.data)
+        rem = fire_base.patch('users/'+urlkey,user_serializer.data) #Make required changes to Firebase
         return user_serializer.data
     else:
         raise exceptions_utils.ValidationException(user_serializer.errors, status.HTTP_400_BAD_REQUEST)

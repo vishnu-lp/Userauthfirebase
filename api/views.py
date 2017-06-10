@@ -323,10 +323,10 @@ def delete_user(request, pk):
         result = fire_base.get('/users',None)
         res = result.keys()
         urlkey = ''
-        for i in res:
+        for i in res:   # to obtain the random key generated.
             if result[str(i)]['id'] == int(pk):
                 urlkey = i
-        rem = fire_base.delete('/users/'+urlkey,None)
+        rem = fire_base.delete('/users/'+urlkey,None) #deletes from firebase
 
         return Response(messages.DELETED_USER, status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'GET':
@@ -337,6 +337,6 @@ def delete_user(request, pk):
         user_profile_serializer = UserProfileSerializer(user)
         return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
 
-class user_list(ListAPIView):
+class user_list(ListAPIView):  #Generic ListAPI View
     queryset = User.objects.all()
     serializer_class = UserSerializer
