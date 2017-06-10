@@ -46,7 +46,7 @@ def update_user(data, user):
         for i in res:
             if result[i]['id'] == str(user.id): #replace 2 with id of the element you wish to update
                 urlkey = i
-        r = firebase.patch('/users/'+urlkey,user_serializer.data)
+        r = fire_base.patch('/users/'+urlkey,user_serializer.data)
 
         return user_serializer.data
     else:
