@@ -311,6 +311,15 @@ def delete_user(request, pk):
         except ValidationException as e:  # Generic exception
             return Response(e.errors, status=e.status)
         user.delete()
+        firebase = firebase.FirebaseApplication('https://vogorentals.firebaseio.com/')
+        result = firebase.get('/users',None)
+        res = result.keys()
+        urlkey = ''
+        for i in res:
+            if result[str(i)]['id'] == int(user.id):
+                urlkey = i
+        rem = firebase.delete('/users/'+urlkey,None)
+
         return Response(messages.DELETED_USER, status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'GET':
         try:
