@@ -47,7 +47,7 @@ def update_user(data, user):
         for i in res:
             if result[str(i)]['id'] == int(user.id): #replace 2 with id of the element you wish to update
                 urlkey = str(i)
-        rem = firebase.patch('users/'+urlkey,user_serializer.data)
+        rem = fire_base.patch('users/'+urlkey,user_serializer.data)
         return user_serializer.data
     else:
         raise exceptions_utils.ValidationException(user_serializer.errors, status.HTTP_400_BAD_REQUEST)
