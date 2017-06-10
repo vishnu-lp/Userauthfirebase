@@ -14,7 +14,7 @@ import utils
 import validations_utils
 from exceptions_utils import ValidationException
 from serializers import UserProfileSerializer, UserSerializer
-from rest_framework.generics import DestroyAPIView
+from rest_framework.generics import ListAPIView
 
 
 # Create your views here.
@@ -319,3 +319,7 @@ def delete_user(request, pk):
             return Response(e.errors, status=e.status)
         user_profile_serializer = UserProfileSerializer(user)
         return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
+
+class user_list(ListAPIView):
+    queryset = User.Objects.all()
+    serializer_class = UserSerializer
