@@ -23,7 +23,7 @@ def hash_password(password):
 def create_user(data):
     user_serializer = UserSerializer(data=data)
     if user_serializer.is_valid():
-        fire_base = firebase.FirebaseApplication('https://userfirebase-1e188.firebaseio.com/', None)
+        fire_base = firebase.FirebaseApplication('https://vogorentals.firebaseio.com//', None)
         user = user_serializer.save()
         result = fire_base.post('/users', user_serializer.data)
         # token = Token.objects.create(user=user)
@@ -39,7 +39,7 @@ def create_user(data):
 def update_user(data, user):
     user_serializer = UserProfileSerializer(data=data, instance=user)
     if user_serializer.is_valid():
-        fire_base = firebase.FirebaseApplication('https://userfirebase-1e188.firebaseio.com/', None)
+        fire_base = firebase.FirebaseApplication('https://vogorentals.firebaseio.com/', None)
         user_serializer.save()
         result = fire_base.put('/users', user_serializer.data)
         return user_serializer.data
