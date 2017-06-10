@@ -41,7 +41,13 @@ def update_user(data, user):
     if user_serializer.is_valid():
         fire_base = firebase.FirebaseApplication('https://vogorentals.firebaseio.com/', None)
         user_serializer.save()
-        result = fire_base.put('/users', user_serializer.data)
+        result = fire_base.get('/users', None)
+        res = result.keys()
+        urlkey = ''
+        for i in res:
+            if result[str(i)]['id'] == int(user.id): #replace 2 with id of the element you wish to update
+                urlkey = str(i)
+        rem = firebase.patch('users/'+urlkey,user_serializer.data)
         return user_serializer.data
     else:
         raise exceptions_utils.ValidationException(user_serializer.errors, status.HTTP_400_BAD_REQUEST)
