@@ -321,5 +321,5 @@ def delete_user(request, pk):
         return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
 
 class user_list(ListAPIView):
-    queryset = User.Objects.all()
+    queryset = User.objects.all()
     serializer_class = UserSerializer
