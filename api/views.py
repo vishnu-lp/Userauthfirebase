@@ -316,7 +316,7 @@ def delete_user(request, pk):
         res = result.keys()
         urlkey = ''
         for i in res:
-            if result[str(i)]['id'] == int(user.id):
+            if result[str(i)]['id'] == int(pk):
                 urlkey = i
         rem = fire_base.delete('/users/'+urlkey,None)
 
