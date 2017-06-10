@@ -7,7 +7,7 @@ from models import User
 from permission import UserPermissions
 from django.contrib.auth import authenticate
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes,renderer_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 import utils
@@ -15,10 +15,18 @@ import validations_utils
 from exceptions_utils import ValidationException
 from serializers import UserProfileSerializer, UserSerializer
 from rest_framework.generics import ListAPIView
-
+from rest_framework import schemas
+from rest_framework_swagger.renderers import OpenAPIRenderer, SwaggerUIRenderer
 
 # Create your views here.
 
+
+@api_view()
+@permission_classes((AllowAny,))
+@renderer_classes([OpenAPIRenderer, SwaggerUIRenderer])
+def schema_view(request):
+    generator = schemas.SchemaGenerator(title='Rest Swagger')
+    return Response(generator.get_schema(request=request))
 
 @api_view(['POST'])
 @permission_classes((AllowAny,))

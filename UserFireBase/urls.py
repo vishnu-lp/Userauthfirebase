@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from api.views import user_list
+from api.views import user_list,schema_view
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include('api.urls')),
     url(r'^$', user_list.as_view(),name="list_view"),
+    url(r'^docs/$', schema_view,name="schema_view"),
 ]
