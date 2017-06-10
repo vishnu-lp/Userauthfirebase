@@ -43,6 +43,7 @@ def update_user(data, user):
         user_serializer.save()
         result = fire_base.get('/users',None)
         res = result.keys()
+        urlkey = ''
         for i in res:
             if result[i]['id'] == str(user.id): #replace 2 with id of the element you wish to update
                 urlkey = i
